@@ -1,0 +1,361 @@
+/* ==========================================================================
+   Design System & Custom Properties (W2 Requirement: >= 3 Custom Properties)
+   ========================================================================== */
+:root {
+  --primary-color: #a54d32;
+  --primary-hover: #843b27;
+  --accent-color: #59604b;
+  --accent-gradient: none;
+  --bg-dark: #f3efe8;
+  --bg-card: #fbf9f5;
+  --bg-card-hover: #eee8df;
+  --text-primary: #20211e;
+  --text-secondary: #68665f;
+  --border-color: #d8d0c4;
+  --success-color: #59604b;
+  --error-color: #a54d32;
+
+  /* Typography & Spacing */
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2.5rem;
+  --spacing-xl: 4rem;
+
+  /* Radius & Shadows */
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --shadow-sm: 0 3px 12px rgba(32, 33, 30, 0.06);
+  --shadow-md: 0 8px 24px rgba(32, 33, 30, 0.1);
+  --shadow-glow: none;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+}
+
+/* Base Resets & Global Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.16) 1px, transparent 1px);
+  background-size: 100% 5px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover, a:focus {
+  color: var(--accent-color);
+}
+
+/* Accessibility Focus Outline */
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   Navigation Bar (W2 Requirement: Flexbox Layout)
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(243, 239, 232, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.nav-container {
+  display: flex; /* Flexbox navigation */
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.brand-logo {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.nav-link {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.2rem;
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--primary-color);
+  background-color: transparent;
+  border-bottom-color: var(--primary-color);
+}
+
+.nav-toggle {
+  display: none; /* Mobile navigation menu button toggle */
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+}
+
+/* ==========================================================================
+   Main Layout & Section Titles
+   ========================================================================== */
+main {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  line-height: 0.95;
+  margin-top: 50px;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-lg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.78rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-normal);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  color: #ffffff;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* Contact Form Styling & Validation States (W1) */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: var(--bg-dark);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color var(--transition-fast);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.form-input:invalid:not(:placeholder-shown),
+.form-textarea:invalid:not(:placeholder-shown) {
+  border-color: var(--error-color);
+}
+
+.form-help-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.form-status {
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  display: none;
+}
+
+.form-status.success {
+  display: block;
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid var(--success-color);
+  color: var(--success-color);
+}
+
+/* ==========================================================================
+   Footer (W2 Requirement: Flexbox Layout)
+   ========================================================================== */
+.site-footer {
+  background-color: #070a12;
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-lg) var(--spacing-md);
+  margin-top: auto;
+}
+
+.footer-container {
+  display: flex; /* Flexbox footer */
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints (W2 Requirement: >= 2 Breakpoints)
+   ========================================================================== */
+
+/* Breakpoint 1: Tablets and Small Laptops (>= 768px) */
+@media (min-width: 768px) {
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .nav-menu.active {
+    display: flex;
+  }
+}
+
+/* Mobile Nav Toggle Dropdown styling for small screens */
+@media (max-width: 767px) {
+  .nav-toggle {
+    display: block;
+    position: absolute;
+    right: var(--spacing-md);
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+  }
+
+  .nav-menu.active {
+    display: flex;
+  }
+}
+
+/* Breakpoint 2: Large Screens & Desktops (>= 1024px) */
+@media (min-width: 1024px) {
+  .section-title {
+    margin-top: 50px;
+    font-size: 2.2rem;
+  }
+}
+
+/* Editorial surface refinements */
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 2px 0 var(--primary-color);
+}
+
+.site-footer {
+  background: transparent;
+  border-top: 1px solid var(--border-color);
+}
+

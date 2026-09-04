@@ -1,0 +1,85 @@
+/* About Me Page Styles */
+.about-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-lg);
+}
+
+.about-card {
+	background-color: var(--bg-card);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius-lg);
+	padding: var(--spacing-md);
+}
+
+.bio-quote {
+	font-size: 1.15rem;
+	font-style: italic;
+	color: var(--accent-color);
+	border-left: 3px solid var(--primary-color);
+	padding-left: 1rem;
+	margin: var(--spacing-sm) 0 var(--spacing-md) 0;
+}
+
+.skills-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-xs);
+	margin-top: var(--spacing-sm);
+	list-style: none;
+}
+
+.skill-tag {
+	background: rgba(99, 102, 241, 0.15);
+	border: 1px solid var(--border-color);
+	color: var(--text-primary);
+	padding: 0.4rem 0.9rem;
+	border-radius: 50px;
+	font-size: 0.88rem;
+	font-weight: 500;
+	transition: all var(--transition-fast);
+}
+
+.skill-tag:hover {
+	border-color: var(--accent-color);
+	color: var(--accent-color);
+}
+
+/* Editorial refinements for the About page. */
+.about-grid {
+	gap: 1px;
+	background: var(--border-color);
+	border: 1px solid var(--border-color);
+}
+
+.about-card {
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+}
+
+.about-card h2,
+.about-card h3 {
+	font-family: var(--font-display);
+	font-weight: 600;
+}
+
+.about-card h2 {
+	font-size: 2rem;
+}
+
+.bio-quote {
+	color: var(--primary-color);
+	border-left-color: var(--primary-color);
+}
+
+.skill-tag {
+	background: transparent;
+	border-radius: 0;
+	color: var(--text-secondary);
+}
+
+.skill-tag:hover {
+	border-color: var(--primary-color);
+	color: var(--primary-color);
+}

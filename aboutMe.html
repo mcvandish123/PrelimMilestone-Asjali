@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="About Benjamin E. Asjali - Computer Science Student and Web Developer. Learn about his skills, experience, and goals.">
+  <title>About Me | Benjamin E. Asjali</title>
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../styles/aboutMe.css">
+</head>
+
+<body>
+  <!-- Semantic Header & Navigation -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="home.html" class="brand-logo" aria-label="Benjamin E. Asjali Portfolio Home">
+         Benjamin E. Asjali
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        ☰
+      </button>
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="home.html" class="nav-link">Home</a></li>
+          <li><a href="aboutMe.html" class="nav-link active">About Me</a></li>
+          <li><a href="projects.html" class="nav-link">Projects</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Landmark -->
+  <main>
+    <section aria-labelledby="about-heading">
+      <h1 id="about-heading" class="section-title">About Me</h1>
+      <p class="section-subtitle">Get to know my background, philosophy, tech stack, and goals.</p>
+
+      <div class="about-grid">
+        <!-- Biography & Personal Mission -->
+        <article class="about-card">
+          <h2>Background &amp; Vision</h2>
+          <blockquote class="bio-quote">
+            "I love creating new ideas for future purposes."
+          </blockquote>
+          <p>
+            Hello! I'm <strong>Benjamin E. Asjali</strong>, a dedicated Computer Science student and web developer. I
+            thrive on transforming complex concepts into clean, functional, and user-centric digital experiences.
+          </p>
+          <p style="margin-top: 1rem;">
+            Whether it's building interactive front-end web applications, designing REST APIs, or exploring back-end
+            systems in PHP and Python, I am constantly learning and experimenting with emerging technologies.
+          </p>
+
+          <h3 style="margin-top: 1.5rem;">Technical Skills</h3>
+          <ul class="skills-list" aria-label="List of technical skills">
+            <li class="skill-tag">HTML5 / CSS3</li>
+            <li class="skill-tag">JavaScript (ES6+)</li>
+            <li class="skill-tag">Node.js</li>
+            <li class="skill-tag">PHP</li>
+            <li class="skill-tag">Python</li>
+            <li class="skill-tag">REST APIs &amp; Fetch</li>
+            <li class="skill-tag">Responsive Grid &amp; Flexbox</li>
+            <li class="skill-tag">Git &amp; GitHub</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Semantic Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <p class="footer-text">&copy; 2026 Benjamin E. Asjali. Built with semantic HTML5, CSS Grid/Flexbox, and vanilla
+        JavaScript.</p>
+      <div class="footer-links">
+        <a href="projects.html" class="nav-link">Projects Gallery</a>
+        <a href="home.html" class="nav-link">Home Page</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
