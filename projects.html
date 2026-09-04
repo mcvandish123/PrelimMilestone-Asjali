@@ -35,7 +35,7 @@
 <h1 id="gallery-heading" class="section-title">Projects Gallery</h1>
 <p class="section-subtitle">Real-time repository data pulled directly from the GitHub REST API.</p>
 
-<!-- Controls Bar: Live search filter (W3). Username fetch removed (W4) -->
+<!-- Controls Bar: Live search filter (W3) and bookmarks-only toggle. Username fetch removed (W4) -->
 <!-- Repositories for mcvandish123 are fetched automatically on page load — see script.js -->
 <div class="controls-bar">
 <div class="control-group">
@@ -44,6 +44,13 @@
 <span class="search-icon" aria-hidden="true">🔍</span>
 <input type="search" id="search-input" class="form-input search-input" placeholder="Type project name (partial search)..." aria-label="Filter projects by name">
 </div>
+</div>
+
+<div class="control-group control-group-toggle">
+<label class="toggle-label" for="bookmarks-only-toggle">
+<input type="checkbox" id="bookmarks-only-toggle" class="toggle-checkbox">
+<span>Show Bookmarks Only</span>
+</label>
 </div>
 </div>
 

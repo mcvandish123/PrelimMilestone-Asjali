@@ -1,3 +1,4 @@
+// Start each feature after the page HTML has loaded.
 document.addEventListener('DOMContentLoaded', function () {
   initNavigation();
   initProjectsGallery();
@@ -82,9 +83,57 @@ const MOCK_GITHUB_REPOS = [
   }
 ];
 
+const BOOKMARKS_STORAGE_KEY = 'bookmarkedRepos';
+
+function getBookmarkedRepoUrls() {
+  try {
+    const raw = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return new Set(Array.isArray(parsed) ? parsed : []);
+  } catch (e) {
+    // localStorage unavailable (e.g. private browsing) — fall back to an
+    // empty, non-persistent bookmark set for this session.
+    return new Set();
+  }
+}
+
+function saveBookmarkedRepoUrls(urlSet) {
+  try {
+    localStorage.setItem(BOOKMARKS_STORAGE_KEY, JSON.stringify(Array.from(urlSet)));
+  } catch (e) {
+    // Ignore write failures (storage disabled/full) — bookmark UI still
+    // updates for the current session even if it can't persist.
+  }
+}
+
+function isRepoBookmarked(repoUrl) {
+  return getBookmarkedRepoUrls().has(repoUrl);
+}
+
+/**
+ * Toggles the bookmark state for a repo (identified by its html_url) and
+ * persists the change. Returns the new bookmarked state (true/false).
+ */
+function toggleRepoBookmark(repoUrl) {
+  const bookmarks = getBookmarkedRepoUrls();
+  let nowBookmarked;
+
+  if (bookmarks.has(repoUrl)) {
+    bookmarks.delete(repoUrl);
+    nowBookmarked = false;
+  } else {
+    bookmarks.add(repoUrl);
+    nowBookmarked = true;
+  }
+
+  saveBookmarkedRepoUrls(bookmarks);
+  return nowBookmarked;
+}
+
 function initProjectsGallery() {
   const projectsGrid = document.getElementById('projects-grid');
   const searchInput = document.getElementById('search-input');
+  const bookmarksOnlyToggle = document.getElementById('bookmarks-only-toggle');
   const spinnerContainer = document.getElementById('spinner-container');
   const errorContainer = document.getElementById('error-container');
 
@@ -100,6 +149,15 @@ function initProjectsGallery() {
     searchInput.addEventListener('input', function (e) {
       const query = e.target.value.toLowerCase().trim();
       filterAndRenderProjects(query);
+    });
+  }
+
+  // Show Bookmarks Only toggle — re-filters using whatever search query is
+  // currently active, so both filters combine naturally.
+  if (bookmarksOnlyToggle) {
+    bookmarksOnlyToggle.addEventListener('change', function () {
+      const currentQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      filterAndRenderProjects(currentQuery);
     });
   }
 
@@ -119,6 +177,8 @@ function initProjectsGallery() {
 
         if (!response.ok) {
           if (response.status === 403) {
+            // Flag this error so the fallback logic below knows to use
+            // mock data instead of showing it to the user as a failure.
             const rateLimitError = new Error('GitHub API rate limit exceeded.');
             rateLimitError.isRateLimit = true;
             throw rateLimitError;
@@ -172,20 +232,29 @@ function initProjectsGallery() {
   }
 
   /**
-   * W3 Requirement: Filter projects by partial name match using JS DOM manipulation
+   * W3 Requirement: Filter projects by partial name match using JS DOM manipulation.
+   * Also applies the "Show Bookmarks Only" toggle, if checked.
    */
   function filterAndRenderProjects(query) {
     clearProjectsGrid();
+
+    const bookmarksOnly = bookmarksOnlyToggle ? bookmarksOnlyToggle.checked : false;
 
     const filtered = allRepositories.filter(function (repo) {
       const nameMatch = repo.name ? repo.name.toLowerCase().includes(query) : false;
       const descMatch = repo.description ? repo.description.toLowerCase().includes(query) : false;
       const langMatch = repo.language ? repo.language.toLowerCase().includes(query) : false;
-      return nameMatch || descMatch || langMatch;
+      const matchesQuery = nameMatch || descMatch || langMatch;
+      const matchesBookmark = bookmarksOnly ? isRepoBookmarked(repo.html_url) : true;
+      return matchesQuery && matchesBookmark;
     });
 
     if (filtered.length === 0) {
-      displayMessage(query ? `No repositories matching "${query}" were found.` : 'No repositories available.');
+      if (bookmarksOnly) {
+        displayMessage(query ? `No bookmarked repositories matching "${query}" were found.` : 'No bookmarked repositories yet. Click "Bookmark" on a project to save it here.');
+      } else {
+        displayMessage(query ? `No repositories matching "${query}" were found.` : 'No repositories available.');
+      }
       return;
     }
 
@@ -251,11 +320,42 @@ function initProjectsGallery() {
     link.textContent = 'View on GitHub →';
     link.setAttribute('aria-label', `View ${repo.name} repository on GitHub`);
 
+    const bookmarkBtn = document.createElement('button');
+    bookmarkBtn.type = 'button';
+    bookmarkBtn.className = 'project-bookmark-btn';
+    const bookmarked = isRepoBookmarked(repo.html_url);
+    bookmarkBtn.classList.toggle('bookmarked', bookmarked);
+    bookmarkBtn.setAttribute('aria-pressed', String(bookmarked));
+    bookmarkBtn.setAttribute('aria-label', `${bookmarked ? 'Remove bookmark from' : 'Bookmark'} ${repo.name}`);
+    bookmarkBtn.textContent = bookmarked ? '★ Bookmarked' : '☆ Bookmark';
+
+    bookmarkBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const nowBookmarked = toggleRepoBookmark(repo.html_url);
+      bookmarkBtn.classList.toggle('bookmarked', nowBookmarked);
+      bookmarkBtn.setAttribute('aria-pressed', String(nowBookmarked));
+      bookmarkBtn.setAttribute('aria-label', `${nowBookmarked ? 'Remove bookmark from' : 'Bookmark'} ${repo.name}`);
+      bookmarkBtn.textContent = nowBookmarked ? '★ Bookmarked' : '☆ Bookmark';
+
+      // If "Show Bookmarks Only" is active, re-filter immediately so an
+      // unbookmarked repo's card disappears from view right away.
+      if (bookmarksOnlyToggle && bookmarksOnlyToggle.checked) {
+        const currentQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        filterAndRenderProjects(currentQuery);
+      }
+    });
+
+    // Actions row groups the GitHub link and the bookmark toggle together
+    const actions = document.createElement('div');
+    actions.className = 'project-actions';
+    actions.appendChild(link);
+    actions.appendChild(bookmarkBtn);
+
     // Assemble components
     article.appendChild(header);
     article.appendChild(desc);
     article.appendChild(meta);
-    article.appendChild(link);
+    article.appendChild(actions);
 
     return article;
   }
